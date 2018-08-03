@@ -57,7 +57,9 @@ public class UserManager {
         boolean isExist = false;
         ResultSet rs = getUserRs(username);
         try {
-            isExist = rs.getRow() >= 1;
+            if (rs != null) {
+                isExist = rs.getRow() >= 1;
+            }
         } catch (SQLException e) {
             e.printStackTrace();
         }
@@ -79,7 +81,7 @@ public class UserManager {
      * @return 如果用户已存在，返回false; 添加成功，返回true
      */
     public boolean addUser(String username, String password) {
-        if (!isUserExist(username)) {
+        if (isUserExist(username)) {
             return false;
         }
         String[] fields = {

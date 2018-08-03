@@ -1,0 +1,130 @@
+package com.bugbean.hurryball.kernel;
+
+import com.bugbean.hurryball.gameframe.MainFrame;
+
+import javax.imageio.ImageIO;
+import java.awt.*;
+import java.awt.geom.RoundRectangle2D;
+import java.awt.image.BufferedImage;
+import java.io.File;
+import java.io.IOException;
+import java.util.Random;
+
+public class Pill {
+    private int pillX;
+    private int pillY;
+    private int speed = 3;
+    private int width = 30;
+    private int height = 30;
+    private Color pillColor;
+
+    private static BufferedImage pillImage;
+    protected Random mRandom = new Random();
+
+    protected int movedHeight;
+
+
+    private double moveDuration = 0;
+    private int moveDistance = 100;
+
+    public Pill() {
+        pillColor = randomColor();
+        try {
+            pillImage = ImageIO.read(new File("images/cool_pill.png"));
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        randomX();
+    }
+
+    public void randomX() {
+        pillX = MainFrame.width + mRandom.nextInt(800);
+        randomSpeed();
+    }
+
+    public Color randomColor() {
+        int r = mRandom.nextInt(255);
+        int g = mRandom.nextInt(255);
+        int b = mRandom.nextInt(255);
+        return new Color(r, g, b);
+    }
+
+    public void paint(Graphics2D g2d) {
+        movedHeight = getMovedY();
+//        Rectangle rect = new Rectangle(getPillX(), movedHeight, width, height);
+        RoundRectangle2D rect = new RoundRectangle2D.Double(getPillX(), movedHeight, width, height,6,6);
+        g2d.setColor(pillColor);
+
+        g2d.fill(rect);
+        pillX -= speed;
+//        g2d.drawImage(pillImage,getPillX(),movedHeight,width+40,height+40,null);
+        if (pillX <= -width) {
+            randomX();
+            setPillColor(randomColor());
+            moveDuration = 0;
+        }
+    }
+
+    protected int getMovedY() {
+        int h = 0;
+        h = (int)(moveDistance * Math.sin(moveDuration * Math.PI));
+        moveDuration += 0.01;
+        return getPillY() + h;
+    }
+
+    public void randomSpeed() {
+        setSpeed(mRandom.nextInt(5) + 1);
+    }
+
+    public int getMovedHeight() {
+        return movedHeight;
+    }
+
+    public int getPillX() {
+        return pillX;
+    }
+
+    public void setPillX(int pillX) {
+        this.pillX = pillX;
+    }
+
+    public int getPillY() {
+        return pillY;
+    }
+
+    public void setPillY(int pillY) {
+        this.pillY = pillY;
+    }
+
+    public int getSpeed() {
+        return speed;
+    }
+
+    public void setSpeed(int speed) {
+        this.speed = speed;
+    }
+
+    public int getWidth() {
+        return width;
+    }
+
+    public void setWidth(int width) {
+        this.width = width;
+    }
+
+    public int getHeight() {
+        return height;
+    }
+
+    public void setHeight(int height) {
+        this.height = height;
+    }
+
+    public Color getPillColor() {
+        return pillColor;
+    }
+
+    public void setPillColor(Color pillColor) {
+        this.pillColor = pillColor;
+    }
+}
