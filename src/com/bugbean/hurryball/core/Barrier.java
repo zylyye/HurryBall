@@ -1,4 +1,4 @@
-package com.bugbean.hurryball.kernel;
+package com.bugbean.hurryball.core;
 
 import java.awt.*;
 

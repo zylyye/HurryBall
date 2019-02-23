@@ -1,4 +1,4 @@
-package com.bugbean.hurryball.kernel;
+package com.bugbean.hurryball.core;
 
 
 import java.applet.Applet;
@@ -6,14 +6,26 @@ import java.applet.AudioClip;
 import java.io.File;
 import java.net.MalformedURLException;
 
+
+/**
+ * 音乐管理器类
+ */
 public class MusicManager {
 
     public static MusicManager sMusicManager;
 
+    /**
+     * 存储音乐资源的数组
+     */
     private AudioClip[] auus;
+
+    /**
+     * 存储音乐列表的数组
+     */
     private String[] musicList = {
         "stereo_madness.wav"
     };
+
     private int size;
 
     private MusicManager() {
@@ -30,14 +42,23 @@ public class MusicManager {
         return sMusicManager;
     }
 
+    /**
+     * 播放指定音乐
+     */
     public void play(int index) {
         auus[index].play();
     }
 
+    /**
+     * 停止指定音乐
+     */
     public void stop(int index) {
         auus[index].stop();
     }
 
+    /**
+     * 向数组中添加音乐
+     */
     public void add(String musicPath) {
         File file = new File(musicPath);
         try {
@@ -46,5 +67,4 @@ public class MusicManager {
             e.printStackTrace();
         }
     }
-
 }

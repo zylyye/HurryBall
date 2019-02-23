@@ -1,5 +1,6 @@
 package com.bugbean.hurryball.gameframe;
 
+import com.bugbean.hurryball.core.Manifest;
 import com.bugbean.hurryball.events.LoginCancelGameEvent;
 import com.bugbean.hurryball.events.LoginStartGameEvent;
 import com.bugbean.hurryball.gamepanel.ImagePanel;
@@ -18,9 +19,12 @@ public class LoginFrame extends JFrame{
     private int height = 768;
 
     public LoginFrame(){
-        loginBtn=new JButton("");
+        loginBtn=new JButton();
         loginBtn.setBounds(630, 468, 300, 70);
+
+        //设置按钮透明
         loginBtn.setContentAreaFilled(false);
+
         loginBtn.addActionListener(new LoginStartGameEvent(this));
         this.add(loginBtn);
 
@@ -30,6 +34,7 @@ public class LoginFrame extends JFrame{
         cancelBtn.addActionListener(new LoginCancelGameEvent());
         this.add(cancelBtn);
 
+
         JPanel bgPanel = new ImagePanel("images/login_bg_with_right_logo.png");
         this.add(bgPanel);
         this.setSize(width,height);
@@ -37,7 +42,7 @@ public class LoginFrame extends JFrame{
         this.setUndecorated(true);
 		this.setResizable(false);
         this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        this.setIconImage(new ImageIcon("BBR/2.jpg").getImage());
+        this.setIconImage(Manifest.getIcon());
         this.setVisible(true);
         ZTools.makeItMoveAble(this);
     }

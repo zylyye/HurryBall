@@ -1,7 +1,8 @@
 package com.bugbean.hurryball.gameframe;
 
+import com.bugbean.hurryball.core.Manifest;
 import com.bugbean.hurryball.gamepanel.MainPanel;
-import com.bugbean.hurryball.kernel.GameTuneController;
+import com.bugbean.hurryball.core.GameTuneController;
 import com.bugbean.utils.ZTools;
 
 import javax.swing.*;
@@ -23,17 +24,16 @@ public class MainFrame extends JFrame {
         add(mMainPanel);
         new Thread(()->{
             while(true) {
-
                 while (!mMainPanel.isPaused()) {
                     mMainPanel.repaint();
                     ZTools.sync();
                     try {
-                        Thread.sleep(flushSpeed);
+                        long l = Math.max(flushSpeed - mMainPanel.getFlushOffset(), 0)
+                        Thread.sleep(l);
                     } catch (InterruptedException e) {
                         e.printStackTrace();
                     }
                 }
-
                 try {
                     Thread.sleep(200);
                 } catch (InterruptedException e) {
@@ -41,12 +41,13 @@ public class MainFrame extends JFrame {
                 }
             }
         }).start();
-        Color bg = new Color(218, 255, 239, 200);
+        Color bg = new Color(255, 255, 255, 200);
         mMainPanel.setBackground(bg);
         addKeyListener(mMainPanel);
 
         ZTools.makeItMoveAble(this);
         setLocationRelativeTo(null);
+        setIconImage(Manifest.getIcon());
         setVisible(true);
         new GameTuneController(this).start();
     }

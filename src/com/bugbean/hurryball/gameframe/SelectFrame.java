@@ -1,5 +1,6 @@
 package com.bugbean.hurryball.gameframe;
 
+import com.bugbean.hurryball.core.Manifest;
 import com.bugbean.hurryball.events.PlayerNumSelectEvent;
 import com.bugbean.hurryball.gamepanel.ImagePanel;
 import com.bugbean.hurryball.gamepanel.SelectPanel;
@@ -31,12 +32,17 @@ public class SelectFrame extends JFrame {
         playerOne = new JButton();
         playerTwo = new JButton();
         playerThree = new JButton();
+
+
         playerOne.setContentAreaFilled(false);
         playerTwo.setContentAreaFilled(false);
         playerThree.setContentAreaFilled(false);
+
+
         playerOne.setBounds(41,164,283,304);
         playerTwo.setBounds(372,166,283,305);
         playerThree.setBounds(696,167,283,305);
+
         playerOne.addActionListener(new PlayerNumSelectEvent(this,1));
         playerTwo.addActionListener(new PlayerNumSelectEvent(this,2));
         playerThree.addActionListener(new PlayerNumSelectEvent(this,3));
@@ -68,6 +74,7 @@ public class SelectFrame extends JFrame {
         setSize(width,height);
         ZTools.makeItMoveAble(this);
         setLocationRelativeTo(null);
+        setIconImage(Manifest.getIcon());
         setVisible(true);
     }
 

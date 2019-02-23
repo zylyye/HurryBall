@@ -1,0 +1,8 @@
+*.class
+/out/
+*.iml
+/.idea
+/.classpath
+/.project
+*.eml
+*.userlibraries
