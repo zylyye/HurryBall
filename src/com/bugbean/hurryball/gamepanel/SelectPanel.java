@@ -1,6 +1,6 @@
 package com.bugbean.hurryball.gamepanel;
 
-import com.bugbean.hurryball.kernel.Ball;
+import com.bugbean.hurryball.core.Ball;
 import com.bugbean.utils.ZTools;
 
 import java.awt.*;
@@ -12,10 +12,12 @@ public class SelectPanel extends ImagePanel {
         mBalls = new Ball[6];
         //#90C7FB
         Color ballColor = new Color(94, 188, 0xfb);
+
         for (int i = 0; i < mBalls.length; i++) {
             mBalls[i] = new Ball(null,i);
             mBalls[i].setBallColor(ballColor);
         }
+
         mBalls[0].setBallX(160);
         mBalls[1].setBallX(435);
         mBalls[2].setBallX(540);
@@ -34,6 +36,8 @@ public class SelectPanel extends ImagePanel {
                 for (int i = 0; i < mBalls.length; i++) {
                     try {
                         Thread.sleep(500);
+
+                        //小球跳跃
                         mBalls[i].jump();
                     } catch (InterruptedException e) {
                         e.printStackTrace();
@@ -41,6 +45,8 @@ public class SelectPanel extends ImagePanel {
                 }
             }
         }).start();
+
+
         new Thread(()->{
             while(true){
                 try {

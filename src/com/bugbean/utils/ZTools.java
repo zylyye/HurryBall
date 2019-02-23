@@ -7,8 +7,9 @@ public class ZTools {
     public static void makeItMoveAble(Frame frame) {
 
         MouseMotionListener m = new FrameMove(frame);
-        frame.addMouseListener(new MouseAdapter() {
 
+        //为窗口添加鼠标事件
+        frame.addMouseListener(new MouseAdapter() {
             @Override
             public void mousePressed(MouseEvent e) {
                 if (e.getButton() == MouseEvent.BUTTON1) {

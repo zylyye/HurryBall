@@ -1,4 +1,4 @@
-package com.bugbean.hurryball.kernel;
+package com.bugbean.hurryball.core;
 
 import com.bugbean.hurryball.gamepanel.MainPanel;
 
@@ -122,7 +122,7 @@ public class Ball {
         }
         int h = sumHeight();
         if (getBallX() >= currentTrapX-getBallWidth()/2 && getBallX() + getBallWidth()/2 <= currentTrapX + currentTrapWidth&&sumHeight()<=0) {
-            drop(1000,0.007);
+            drop(1500,0.007);
         }
     }
 

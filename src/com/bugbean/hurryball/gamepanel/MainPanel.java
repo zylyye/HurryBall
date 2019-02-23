@@ -2,8 +2,7 @@ package com.bugbean.hurryball.gamepanel;
 
 import com.bugbean.hurryball.gameframe.MainFrame;
 import com.bugbean.hurryball.gameframe.SelectFrame;
-import com.bugbean.hurryball.kernel.*;
-
+import com.bugbean.hurryball.core.*;
 import javax.imageio.ImageIO;
 import javax.swing.*;
 import java.awt.*;
@@ -18,6 +17,10 @@ import java.io.IOException;
 import java.util.Random;
 
 public class MainPanel extends JPanel implements KeyListener {
+    /**
+     * 刷新间隔偏移量
+     */
+    private long flushOffset = 0;
 
     private MainFrame mContainer;
     private Random mRandom = new Random();
@@ -106,6 +109,7 @@ public class MainPanel extends JPanel implements KeyListener {
     private boolean rotateAble = true;
     private boolean shadowPillVisible = true;
     private boolean shadowAble = true;
+    private boolean bgVisible = true;
 
     private Color[] pairColor = {new Color(0x8c,0xc4,0xfa), new Color(182, 0, 255)};
 
@@ -193,8 +197,11 @@ public class MainPanel extends JPanel implements KeyListener {
     @Override
     public void paintComponent(Graphics g) {
         super.paintComponent(g);
+        long start = System.currentTimeMillis();
         Graphics2D g2d = (Graphics2D) g;
-        g2d.drawImage(bgImage,0,0,1920,1080,null);
+        if (bgVisible) {
+            g2d.drawImage(bgImage,0,0,1920,1080,null);
+        }
 
         g2d.setFont(new Font("SansSerif",Font.BOLD, 16));
 
@@ -213,6 +220,7 @@ public class MainPanel extends JPanel implements KeyListener {
 
 
 
+        //画面缩放
         g2d.scale(scaleX,scaleY);
         g2d.translate(0,shakeY);
         g2d.rotate(theta,getWidth()/2,getHeight()/2);
@@ -291,7 +299,6 @@ public class MainPanel extends JPanel implements KeyListener {
                             }
 //                        balls[j].setCurrentTrapHeight(h);
                             if(true) {
-                                System.out.println("asdfsafdasdf");
                                 balls[j].setCurrentTrapX(startX);
                                 balls[j].setCurrentTrapWidth(lineWidth);
                             }
@@ -339,8 +346,9 @@ public class MainPanel extends JPanel implements KeyListener {
 
 
             balls[j].paint(g2d);
-
-
+            long end = System.currentTimeMillis();
+            // 设置刷新时间偏移量
+            this.setFlushOffset(end - start);
         }
     }
 
@@ -382,7 +390,7 @@ public class MainPanel extends JPanel implements KeyListener {
         if (e.getKeyCode() == KeyEvent.VK_1 && ballCount > 0) {
             ballJump(1);
         }
-        if (e.getKeyCode() == KeyEvent.VK_2 && ballCount > 1) {
+        if (e.getKeyCode() == KeyEvent.VK_0 && ballCount > 1) {
             ballJump(2);
         }
 
@@ -394,7 +402,7 @@ public class MainPanel extends JPanel implements KeyListener {
         }
 
         if (e.getKeyCode() == KeyEvent.VK_C) {
-            Color bg = new Color(218, 255, 239, (int)(Math.random()*255));
+            Color bg = new Color(255, 255, 255, (int)(Math.random()*255));
             this.setBackground(bg);
         }
 
@@ -414,6 +422,14 @@ public class MainPanel extends JPanel implements KeyListener {
 
         if (e.getKeyCode() == KeyEvent.VK_D) {
             ball.drop(500,0.007);
+        }
+
+        if (e.getKeyCode() == KeyEvent.VK_G) {
+            if (bgVisible) {
+                bgVisible = false;
+            } else {
+                bgVisible = true;
+            }
         }
 
     }
@@ -583,7 +599,7 @@ public class MainPanel extends JPanel implements KeyListener {
                 }
                 try {
                     Thread.sleep(100);
-                    initTime += 10;
+                    initTime += 100;
                 } catch (InterruptedException e) {
                     e.printStackTrace();
                 }
@@ -655,7 +671,16 @@ public class MainPanel extends JPanel implements KeyListener {
         int duration = 18/trapNum;
         trapIndex[0] = 10 + mRandom.nextInt(5);
         for (int i = 1; i < trapNum; i++) {
-            trapIndex[i] = trapIndex[i - 1]+5 + mRandom.nextInt(10);
+            trapIndex[i] = trapIndex[i - 1]+5 + mRandom.nextInt(10
+            );
         }
+    }
+
+    public long getFlushOffset() {
+        return flushOffset;
+    }
+
+    public void setFlushOffset(long flushOffset) {
+        this.flushOffset = flushOffset;
     }
 }
