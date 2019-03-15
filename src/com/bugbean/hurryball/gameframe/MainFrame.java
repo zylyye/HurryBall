@@ -4,11 +4,13 @@ import com.bugbean.hurryball.core.Manifest;
 import com.bugbean.hurryball.gamepanel.MainPanel;
 import com.bugbean.hurryball.core.GameTuneController;
 import com.bugbean.utils.ZTools;
-
 import javax.swing.*;
 import java.awt.*;
 
-public class MainFrame extends JFrame {
+/**
+ * 主游戏窗口
+ */
+public class MainFrame extends BaseFrame {
 //    private int width = 1500;
     public static int width = 1500;
 //    private int height = 800;
@@ -28,7 +30,7 @@ public class MainFrame extends JFrame {
                     mMainPanel.repaint();
                     ZTools.sync();
                     try {
-                        long l = Math.max(flushSpeed - mMainPanel.getFlushOffset(), 0)
+                        long l = Math.max(flushSpeed - mMainPanel.getFlushOffset(), 0);
                         Thread.sleep(l);
                     } catch (InterruptedException e) {
                         e.printStackTrace();
@@ -44,7 +46,6 @@ public class MainFrame extends JFrame {
         Color bg = new Color(255, 255, 255, 200);
         mMainPanel.setBackground(bg);
         addKeyListener(mMainPanel);
-
         ZTools.makeItMoveAble(this);
         setLocationRelativeTo(null);
         setIconImage(Manifest.getIcon());
@@ -79,9 +80,6 @@ public class MainFrame extends JFrame {
     public MainPanel getMainPanel() {
         return mMainPanel;
     }
-
-
-
 
 
     public static void main(String[] args) {

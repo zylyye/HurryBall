@@ -1,6 +1,8 @@
 package com.bugbean.hurryball.core;
 
 
+import sun.audio.AudioPlayer;
+
 import java.applet.Applet;
 import java.applet.AudioClip;
 import java.io.File;

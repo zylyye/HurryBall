@@ -433,15 +433,15 @@ public class MainPanel extends JPanel implements KeyListener {
         }
 
     }
-
-
     @Override
     public void keyReleased(KeyEvent e) {
         if (e.getKeyCode() == KeyEvent.VK_ESCAPE) {
             if (isPaused) {
                 setPaused(false);
+                mMusicManager.play(0);
             } else {
                 setPaused(true);
+                mMusicManager.stop(0);
             }
         }
     }

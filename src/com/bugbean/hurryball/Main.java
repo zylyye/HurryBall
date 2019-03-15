@@ -9,7 +9,7 @@ public class Main {
     public static void main(String[] args) {
         EventQueue.invokeLater(()->{
             //TODO game start here
-            new LoginFrame();
+            LoginFrame.getLoginFrame().open();
         });
     }
 }
