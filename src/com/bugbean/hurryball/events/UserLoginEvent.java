@@ -1,7 +1,6 @@
 package com.bugbean.hurryball.events;
 
 import com.bugbean.database.UserManager;
-
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;

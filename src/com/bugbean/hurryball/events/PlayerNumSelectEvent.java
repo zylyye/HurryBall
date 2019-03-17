@@ -2,7 +2,6 @@ package com.bugbean.hurryball.events;
 
 import com.bugbean.hurryball.gameframe.MainFrame;
 import com.bugbean.hurryball.gameframe.SelectFrame;
-
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 

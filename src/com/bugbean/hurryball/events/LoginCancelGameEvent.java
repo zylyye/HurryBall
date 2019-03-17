@@ -6,7 +6,7 @@ import java.awt.event.ActionListener;
 public class LoginCancelGameEvent implements ActionListener {
     @Override
     public void actionPerformed(ActionEvent e) {
-        //TODO 结束游戏
+        // 结束游戏
         System.exit(0);
     }
 }

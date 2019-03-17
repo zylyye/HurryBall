@@ -28,7 +28,7 @@ public class ZTools {
     }
 
     public static void sync() {
-        if (System.getProperty("os.name").equalsIgnoreCase("linux")) {
+        if (!System.getProperty("os.name").equalsIgnoreCase("linux")) {
             Toolkit.getDefaultToolkit().sync();
         }
     }

@@ -1,13 +1,9 @@
 package com.bugbean.hurryball.core;
 
 import com.bugbean.hurryball.gameframe.MainFrame;
-
-import javax.imageio.ImageIO;
 import java.awt.*;
 import java.awt.geom.RoundRectangle2D;
 import java.awt.image.BufferedImage;
-import java.io.File;
-import java.io.IOException;
 import java.util.Random;
 
 public class Pill {
@@ -29,11 +25,7 @@ public class Pill {
 
     public Pill() {
         pillColor = randomColor();
-        try {
-            pillImage = ImageIO.read(new File("images/cool_pill.png"));
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
+        pillImage = Manifest.getImage("images/cool_pill.png");
         randomX();
     }
 

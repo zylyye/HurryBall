@@ -2,7 +2,6 @@ package com.bugbean.hurryball.gamepanel;
 
 import com.bugbean.hurryball.core.Ball;
 import com.bugbean.utils.ZTools;
-
 import java.awt.*;
 
 public class SelectPanel extends ImagePanel {

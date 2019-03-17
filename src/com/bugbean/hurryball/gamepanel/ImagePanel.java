@@ -1,22 +1,21 @@
 package com.bugbean.hurryball.gamepanel;
 
-import javax.imageio.ImageIO;
+import com.bugbean.hurryball.core.Manifest;
 import javax.swing.*;
 import java.awt.*;
-import java.io.File;
-import java.io.IOException;
 
+/**
+ * 背景面板
+ */
 public class ImagePanel extends JPanel {
     private Image bgImage;
-
+    /**
+     * 面板背景图片路径
+     * @param bgPath
+     */
     public ImagePanel(String bgPath) {
-        try {
-            bgImage = ImageIO.read(new File(bgPath));
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
+        bgImage = Manifest.getImage(bgPath);
     }
-
     @Override
     protected void paintComponent(Graphics g) {
         super.paintComponent(g);

@@ -3,7 +3,6 @@ package com.bugbean.hurryball.gamepanel;
 import com.bugbean.hurryball.gameframe.MainFrame;
 import com.bugbean.hurryball.gameframe.SelectFrame;
 import com.bugbean.hurryball.core.*;
-import javax.imageio.ImageIO;
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.KeyEvent;
@@ -12,8 +11,6 @@ import java.awt.geom.Ellipse2D;
 import java.awt.geom.Rectangle2D;
 import java.awt.geom.RoundRectangle2D;
 import java.awt.image.BufferedImage;
-import java.io.File;
-import java.io.IOException;
 import java.util.Random;
 
 public class MainPanel extends JPanel implements KeyListener {
@@ -110,24 +107,15 @@ public class MainPanel extends JPanel implements KeyListener {
     private boolean shadowPillVisible = true;
     private boolean shadowAble = true;
     private boolean bgVisible = true;
-
     private Color[] pairColor = {new Color(0x8c,0xc4,0xfa), new Color(182, 0, 255)};
-
     private int[] trapIndex;
     private int trapNum = 2;
-
-
-
 
     public MainPanel(MainFrame container,int playerNum) {
         mContainer = container;
         ballCount = playerNum;
         mMusicManager = MusicManager.getMusicManager();
-        try {
-            bgImage = ImageIO.read(new File("images/game_bg.png"));
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
+        bgImage = Manifest.getImage("images/game_bg.png");
         lineStartXs   = new int[ballCount];
         lineStartYs   = new int[ballCount];
         lineWidths    = new int[ballCount];

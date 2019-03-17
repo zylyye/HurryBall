@@ -1,13 +1,8 @@
 package com.bugbean.hurryball.core;
 
-
-import sun.audio.AudioPlayer;
-
 import java.applet.Applet;
 import java.applet.AudioClip;
 import java.io.File;
-import java.net.MalformedURLException;
-
 
 /**
  * 音乐管理器类
@@ -25,7 +20,7 @@ public class MusicManager {
      * 存储音乐列表的数组
      */
     private String[] musicList = {
-        "stereo_madness.wav"
+            "stereo_madness.wav"
     };
 
     private int size;
@@ -33,7 +28,7 @@ public class MusicManager {
     private MusicManager() {
         auus = new AudioClip[musicList.length];
         for (int i = 0; i < musicList.length; i++) {
-            add("sounds/"+musicList[i]);
+            add("sounds/" + musicList[i]);
         }
     }
 
@@ -63,10 +58,6 @@ public class MusicManager {
      */
     public void add(String musicPath) {
         File file = new File(musicPath);
-        try {
-            auus[size++] = Applet.newAudioClip(file.toURL());
-        } catch (MalformedURLException e) {
-            e.printStackTrace();
-        }
+        auus[size++] = Applet.newAudioClip(Manifest.getResourceURL(musicPath));
     }
 }

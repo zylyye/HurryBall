@@ -47,9 +47,11 @@ public class LoginFrame extends BaseFrame{
         cancelBtn.addActionListener(new LoginCancelGameEvent());
         this.add(cancelBtn);
 
-
+        // 创建背景面板
         JPanel bgPanel = new ImagePanel("images/login_bg_with_right_logo.png");
+        // 添加到容器中作为容器背景
         this.add(bgPanel);
+
         this.setSize(width,height);
         this.setLocationRelativeTo(null);
         this.setUndecorated(true);

@@ -4,7 +4,6 @@ import com.bugbean.hurryball.core.Manifest;
 import com.bugbean.hurryball.events.PlayerNumSelectEvent;
 import com.bugbean.hurryball.gamepanel.SelectPanel;
 import com.bugbean.utils.ZTools;
-
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.*;

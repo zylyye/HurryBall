@@ -1,7 +1,6 @@
 package com.bugbean.hurryball.core;
 
 import com.bugbean.hurryball.gameframe.MainFrame;
-
 import java.awt.*;
 import java.awt.geom.Ellipse2D;
 
