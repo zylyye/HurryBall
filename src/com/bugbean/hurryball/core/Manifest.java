@@ -3,7 +3,9 @@ package com.bugbean.hurryball.core;
 import javax.imageio.ImageIO;
 import java.awt.*;
 import java.awt.image.BufferedImage;
+import java.io.File;
 import java.io.IOException;
+import java.net.MalformedURLException;
 import java.net.URL;
 
 public class Manifest {
@@ -27,6 +29,11 @@ public class Manifest {
     }
 
     public static URL getResourceURL(String path) {
+        try {
+            return new File(path).toURL();
+        } catch (MalformedURLException e) {
+            e.printStackTrace();
+        }
         return Manifest.class.getResource("/" + path);
     }
 }

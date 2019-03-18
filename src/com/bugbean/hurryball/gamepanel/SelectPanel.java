@@ -30,12 +30,12 @@ public class SelectPanel extends ImagePanel {
         mBalls[4].setBallY(400,0);
         mBalls[5].setBallY(400,0);
 
+        // 小球周期性跳动
         new Thread(()->{;
             while (true) {
                 for (int i = 0; i < mBalls.length; i++) {
                     try {
                         Thread.sleep(500);
-
                         //小球跳跃
                         mBalls[i].jump();
                     } catch (InterruptedException e) {
@@ -50,6 +50,7 @@ public class SelectPanel extends ImagePanel {
             while(true){
                 try {
                     Thread.sleep(10);
+                    // 重新绘制
                     repaint();
                     ZTools.sync();
                 } catch (InterruptedException e) {

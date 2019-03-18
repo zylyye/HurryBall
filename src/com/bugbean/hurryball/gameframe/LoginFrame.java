@@ -51,13 +51,14 @@ public class LoginFrame extends BaseFrame{
         JPanel bgPanel = new ImagePanel("images/login_bg_with_right_logo.png");
         // 添加到容器中作为容器背景
         this.add(bgPanel);
-
         this.setSize(width,height);
         this.setLocationRelativeTo(null);
+        // 去除
         this.setUndecorated(true);
 		this.setResizable(false);
         this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         this.setIconImage(Manifest.getIcon());
+        // 窗口可移动
         ZTools.makeItMoveAble(this);
     }
 }
