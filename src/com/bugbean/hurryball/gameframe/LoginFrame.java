@@ -20,7 +20,7 @@ public class LoginFrame extends BaseFrame{
     private int height = 768;
 
     /**
-     * 获取登录窗口对象单例
+     * 获取游戏开始窗口对象单例
      * @return
      */
     public static LoginFrame getLoginFrame() {

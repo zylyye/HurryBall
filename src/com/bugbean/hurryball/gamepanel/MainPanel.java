@@ -3,6 +3,7 @@ package com.bugbean.hurryball.gamepanel;
 import com.bugbean.hurryball.gameframe.MainFrame;
 import com.bugbean.hurryball.gameframe.SelectFrame;
 import com.bugbean.hurryball.core.*;
+
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.KeyEvent;
@@ -48,7 +49,7 @@ public class MainPanel extends JPanel implements KeyListener {
     private Ball[] balls;
     private int ballCount = 1;
     private Ball ball;
-//    private int lineCounts = 26;
+    //    private int lineCounts = 26;
     private int lineCounts = 56;
 
     private Barrier[] bars;
@@ -67,8 +68,6 @@ public class MainPanel extends JPanel implements KeyListener {
     private int speedPillScore = 70;
 
 
-
-
     //游戏是否暂停
     private boolean isPaused = false;
 
@@ -77,11 +76,11 @@ public class MainPanel extends JPanel implements KeyListener {
 
 
     //旋转参数
-    private double unite = Math.PI/180;
+    private double unite = Math.PI / 180;
     private double theta = 0;
     private double lastTheta;
-    private double rotateTheta = 90*unite;
-    private double minRotateTheta = 15*unite;
+    private double rotateTheta = 90 * unite;
+    private double minRotateTheta = 15 * unite;
     private double rotateDuration = 0;
     private double[] availableRotateTheta = {15, 30, 45};
 
@@ -107,36 +106,36 @@ public class MainPanel extends JPanel implements KeyListener {
     private boolean shadowPillVisible = true;
     private boolean shadowAble = true;
     private boolean bgVisible = true;
-    private Color[] pairColor = {new Color(0x8c,0xc4,0xfa), new Color(182, 0, 255)};
+    private Color[] pairColor = {new Color(0x8c, 0xc4, 0xfa), new Color(182, 0, 255)};
     private int[] trapIndex;
     private int trapNum = 2;
 
-    public MainPanel(MainFrame container,int playerNum) {
+    public MainPanel(MainFrame container, int playerNum) {
         mContainer = container;
         ballCount = playerNum;
         mMusicManager = MusicManager.getMusicManager();
         bgImage = Manifest.getImage("images/game_bg.png");
-        lineStartXs   = new int[ballCount];
-        lineStartYs   = new int[ballCount];
-        lineWidths    = new int[ballCount];
+        lineStartXs = new int[ballCount];
+        lineStartYs = new int[ballCount];
+        lineWidths = new int[ballCount];
         lineDurations = new int[ballCount];
-        trap          = new int[ballCount];
-        trapIndex     = new int[trapNum];
+        trap = new int[ballCount];
+        trapIndex = new int[trapNum];
         randomTrap();
-        lineStartY = mContainer.getHeight() - (4-ballCount)*150;
-        arrayFill(lineStartXs,lineStartX);
-        arrayFill(lineStartYs,lineStartY);
+        lineStartY = mContainer.getHeight() - (4 - ballCount) * 150;
+        arrayFill(lineStartXs, lineStartX);
+        arrayFill(lineStartYs, lineStartY);
         for (int i = 0; i < ballCount; i++) {
-            lineStartYs[i] = lineStartY - gameHeight*i;
+            lineStartYs[i] = lineStartY - gameHeight * i;
         }
-        arrayFill(lineWidths,lineWidth);
-        arrayFill(lineDurations,lineDuration);
+        arrayFill(lineWidths, lineWidth);
+        arrayFill(lineDurations, lineDuration);
 
 
         balls = new Ball[ballCount];
         for (int i = 0; i < ballCount; i++) {
             balls[i] = new Ball(this, i);
-            balls[i].setBallY(lineStartYs[i],5);
+            balls[i].setBallY(lineStartYs[i], 5);
         }
 
         bars = new Barrier[barNum];
@@ -149,7 +148,7 @@ public class MainPanel extends JPanel implements KeyListener {
         for (int i = 0; i < ballCount; i++) {
             for (int j = 0; j < pillCount; j++) {
                 pills[i][j] = new Pill();
-                pills[i][j].setPillY(lineStartYs[i]-130);
+                pills[i][j].setPillY(lineStartYs[i] - 130);
             }
         }
 
@@ -157,7 +156,7 @@ public class MainPanel extends JPanel implements KeyListener {
         for (int i = 0; i < ballCount; i++) {
             for (int j = 0; j < shadowPillCount; j++) {
                 shadowPills[i][j] = new ShadowPill();
-                shadowPills[i][j].setPillY(lineStartYs[i]-120);
+                shadowPills[i][j].setPillY(lineStartYs[i] - 120);
             }
         }
 
@@ -165,19 +164,19 @@ public class MainPanel extends JPanel implements KeyListener {
         for (int i = 0; i < ballCount; i++) {
             for (int j = 0; j < speedPillCount; j++) {
                 speedPills[i][j] = new SpeedPill();
-                speedPills[i][j].setPillY(lineStartYs[i]-200);
+                speedPills[i][j].setPillY(lineStartYs[i] - 200);
             }
         }
 
         ball = balls[0];
-        ball.setBallY(lineStartY,5);
+        ball.setBallY(lineStartY, 5);
 
 
         mColors = new Color[lineCounts];
         for (int i = 0; i < lineCounts; i++) {
             mColors[i] = randomColor();
         }
-        setScale(1.0,1.0,0.003);
+        setScale(1.0, 1.0, 0.003);
         mMusicManager.play(0);
 //        rotate(360*unite,0.004);
     }
@@ -188,42 +187,41 @@ public class MainPanel extends JPanel implements KeyListener {
         long start = System.currentTimeMillis();
         Graphics2D g2d = (Graphics2D) g;
         if (bgVisible) {
-            g2d.drawImage(bgImage,0,0,1920,1080,null);
+            g2d.drawImage(bgImage, 0, 0, 1920, 1080, null);
         }
 
-        g2d.setFont(new Font("SansSerif",Font.BOLD, 16));
+        g2d.setFont(new Font("SansSerif", Font.BOLD, 16));
 
         g2d.setColor(pairColor[0]);
-        g2d.drawString("旋转效果："+(isRotateAble()?"ON":"OFF"),40,26);
-        g2d.drawString("阴影效果："+(isShadowAble()?"ON":"OFF"),40,49);
-        g2d.drawString("加速效果："+(isAccelerateAble()?"ON":"OFF"),40,71);
-        RoundRectangle2D rotatePillShape = new RoundRectangle2D.Double(10, 10, 20, 20,6,6);
+        g2d.drawString("旋转效果：" + (isRotateAble() ? "ON" : "OFF"), 40, 26);
+        g2d.drawString("阴影效果：" + (isShadowAble() ? "ON" : "OFF"), 40, 49);
+        g2d.drawString("加速效果：" + (isAccelerateAble() ? "ON" : "OFF"), 40, 71);
+        RoundRectangle2D rotatePillShape = new RoundRectangle2D.Double(10, 10, 20, 20, 6, 6);
         Ellipse2D shadowPillShape = new Ellipse2D.Double(10, 35, 20, 15);
         g2d.fill(rotatePillShape);
         g2d.fill(shadowPillShape);
-        g2d.setPaint(new GradientPaint(0,0,pairColor[0],10,10,pairColor[1],true));
+        g2d.setPaint(new GradientPaint(0, 0, pairColor[0], 10, 10, pairColor[1], true));
         Rectangle2D speedPillShape = new Rectangle2D.Double(10, 55, 20, 20);
 
         g2d.fill(speedPillShape);
 
 
-
         //画面缩放
-        g2d.scale(scaleX,scaleY);
-        g2d.translate(0,shakeY);
-        g2d.rotate(theta,getWidth()/2,getHeight()/2);
-        for (int j = ballCount-1; j >= 0; j--) {
+        g2d.scale(scaleX, scaleY);
+        g2d.translate(0, shakeY);
+        g2d.rotate(theta, getWidth() / 2, getHeight() / 2);
+        for (int j = ballCount - 1; j >= 0; j--) {
 
             //绘制游戏分数
             g2d.setColor(balls[j].getBallColor());
-            g2d.fillOval(700,lineStartYs[j]-280,balls[j].getBallWidth()/3*2,balls[j].getBallHeight()/3*2);
+            g2d.fillOval(700, lineStartYs[j] - 280, balls[j].getBallWidth() / 3 * 2, balls[j].getBallHeight() / 3 * 2);
 //            g2d.setRenderingHint(RenderingHints.KEY_ANTIALIASING,RenderingHints.VALUE_ANTIALIAS_ON);
 //            g2d.setRenderingHint(RenderingHints.KEY_TEXT_ANTIALIASING,RenderingHints.VALUE_TEXT_ANTIALIAS_GASP);
-            g2d.setFont(new Font("SansSerif",Font.BOLD, 20));
+            g2d.setFont(new Font("SansSerif", Font.BOLD, 20));
 
-            g2d.drawString("SCORE:"+(int)(balls[j].getScore()),760,lineStartYs[j]-255);
+            g2d.drawString("SCORE:" + (int) (balls[j].getScore()), 760, lineStartYs[j] - 255);
 
-            if(rotatePillVisible) {
+            if (rotatePillVisible) {
                 for (int i = 0; i < pillCount; i++) {
                     pills[j][i].paint(g2d);
 
@@ -237,12 +235,12 @@ public class MainPanel extends JPanel implements KeyListener {
                 }
             }
 
-            if(shadowPillVisible) {
+            if (shadowPillVisible) {
                 for (int i = 0; i < shadowPillCount; i++) {
                     shadowPills[j][i].paint(g2d);
                     if (pillHitTest(balls[j], shadowPills[j][i])) {
                         shadowPills[j][i].randomX();
-                        if(shadowAble){
+                        if (shadowAble) {
                             randomShadow(20, 80);
                         }
                         balls[j].addScore(shadowPillScore);
@@ -250,19 +248,18 @@ public class MainPanel extends JPanel implements KeyListener {
                 }
             }
 
-            if(aceleratePillVisible) {
+            if (aceleratePillVisible) {
                 for (int i = 0; i < speedPillCount; i++) {
                     speedPills[j][i].paint(g2d);
                     if (pillHitTest(balls[j], speedPills[j][i])) {
                         speedPills[j][i].randomX();
-                        if(accelerateAble) {
+                        if (accelerateAble) {
                             accelerateFlushSpeed(5000, 4);
                         }
                         balls[j].addScore(speedPillScore);
                     }
                 }
             }
-
 
 
             for (int i = 0; i < lineCounts; i++) {
@@ -274,9 +271,8 @@ public class MainPanel extends JPanel implements KeyListener {
                 if (startX < getWidth() - 400) {
 
 
-
                     //滑块上滑
-                    for (int k = trapNum-1; k >=0; k--) {
+                    for (int k = trapNum - 1; k >= 0; k--) {
                         if (i == trapIndex[k]) {
                             int h = 0;
                             if (startX < getWidth() - 1000) {
@@ -286,7 +282,7 @@ public class MainPanel extends JPanel implements KeyListener {
                                 h = (int) (trapHeight * Math.sin((d + 0.5) * Math.PI));
                             }
 //                        balls[j].setCurrentTrapHeight(h);
-                            if(true) {
+                            if (true) {
                                 balls[j].setCurrentTrapX(startX);
                                 balls[j].setCurrentTrapWidth(lineWidth);
                             }
@@ -302,31 +298,31 @@ public class MainPanel extends JPanel implements KeyListener {
 
                     //小球随滑块下落
                     if (balls[j].getBallX() + lineWidths[j] <= 200) {
-                        balls[j].setBallY(startY,5);
+                        balls[j].setBallY(startY, 5);
                         if (balls[j].isJumpAble()) {
                             balls[j].setJumpAble(false);
                         }
                     }
-                }else if (startX >= getWidth() - 200) {
+                } else if (startX >= getWidth() - 200) {
                     double d = (double) (startX - (getWidth() - 200)) / 400;
                     int h = (int) ((dropHeight) * Math.sin((d) * Math.PI));
                     startY += -h;
                 }
 
                 //垂直杆状障碍物
-                if(false) {
+                if (false) {
                     bars[0].setBarColor(getPointColor(startX, j));
-                    bars[0].setX(startX+45);
+                    bars[0].setX(startX + 45);
                     bars[0].setY(startY);
-                    balls[j].setCurrentTrapX(startX+45);
+                    balls[j].setCurrentTrapX(startX + 45);
                     balls[j].setCurrentTrapHeight(80);
                     bars[0].paint(g2d);
                 }
-                g2d.setColor(mColors[i % (lineCounts/2)]);
+                g2d.setColor(mColors[i % (lineCounts / 2)]);
                 g2d.drawLine(startX, startY, endX, startY);
             }
             lineStartXs[j] -= speed;
-            if (lineStartXs[j] <= -(lineCounts/2 * (lineWidths[j] + lineDurations[j]))) {
+            if (lineStartXs[j] <= -(lineCounts / 2 * (lineWidths[j] + lineDurations[j]))) {
                 lineStartXs[j] = 0;
                 bars[0].setSmallAble(!bars[0].isSmallAble());
                 randomTrap();
@@ -340,9 +336,9 @@ public class MainPanel extends JPanel implements KeyListener {
         }
     }
 
-    public Color getPointColor(int x,int index) {
+    public Color getPointColor(int x, int index) {
         Color color = mColors[0];
-        for (int i = 0; i < lineCounts/2 ; i++) {
+        for (int i = 0; i < lineCounts / 2; i++) {
             if (Math.abs(lineStartXs[index] + i * (lineWidths[index] + lineDurations[index]) - x) <= lineWidth) {
                 color = mColors[i];
             }
@@ -351,11 +347,11 @@ public class MainPanel extends JPanel implements KeyListener {
     }
 
     private Color randomColor() {
-        int r = (int) (Math.random()*255);
-        int g = (int) (Math.random()*255);
-        int b = (int) (Math.random()*255);
+        int r = (int) (Math.random() * 255);
+        int g = (int) (Math.random() * 255);
+        int b = (int) (Math.random() * 255);
 
-         return new Color(r, g, b);
+        return new Color(r, g, b);
     }
 
     private void arrayFill(int[] arr, int value) {
@@ -386,20 +382,20 @@ public class MainPanel extends JPanel implements KeyListener {
             rotate(30);
         }
         if (e.getKeyCode() == KeyEvent.VK_S) {
-            accelerateFlushSpeed(5000,5);
+            accelerateFlushSpeed(5000, 5);
         }
 
         if (e.getKeyCode() == KeyEvent.VK_C) {
-            Color bg = new Color(255, 255, 255, (int)(Math.random()*255));
+            Color bg = new Color(255, 255, 255, (int) (Math.random() * 255));
             this.setBackground(bg);
         }
 
         if (e.getKeyCode() == KeyEvent.VK_A) {
-            ballAhead(ball,5000,2);
+            ballAhead(ball, 5000, 2);
         }
 
         if (e.getKeyCode() == KeyEvent.VK_UP) {
-            setScale(scaleX+0.2, scaleY + 0.2);
+            setScale(scaleX + 0.2, scaleY + 0.2);
         }
         if (e.getKeyCode() == KeyEvent.VK_DOWN) {
             setScale(scaleX - 0.2, scaleY - 0.2);
@@ -409,7 +405,7 @@ public class MainPanel extends JPanel implements KeyListener {
         }
 
         if (e.getKeyCode() == KeyEvent.VK_D) {
-            ball.drop(500,0.007);
+            ball.drop(500, 0.007);
         }
 
         if (e.getKeyCode() == KeyEvent.VK_G) {
@@ -421,6 +417,7 @@ public class MainPanel extends JPanel implements KeyListener {
         }
 
     }
+
     @Override
     public void keyReleased(KeyEvent e) {
         if (e.getKeyCode() == KeyEvent.VK_ESCAPE) {
@@ -450,8 +447,11 @@ public class MainPanel extends JPanel implements KeyListener {
 
     }
 
+    /**
+     * 小球落地是画面抖动
+     */
     public void shakeIt() {
-        new Thread(()->{
+        new Thread(() -> {
             while (shakeDuration <= 1) {
                 shakeY = shakeHeight * Math.sin(shakeDuration * Math.PI);
                 shakeDuration += 0.01;
@@ -465,13 +465,24 @@ public class MainPanel extends JPanel implements KeyListener {
             shakeDuration = 0;
         }).start();
     }
+
+    /**
+     * 游戏画面旋转，默认旋转速率0.01
+     * @param rTheta 旋转角度
+     */
     public void rotate(double rTheta) {
-        rotate(rTheta,0.01);
+        rotate(rTheta, 0.01);
     }
-    public void rotate(double rTheta,double changeDuration) {
-        new Thread(() ->{
+
+    /**
+     * 游戏画面旋转
+     * @param rTheta    旋转角度，单位度
+     * @param changeDuration    旋转动画速率
+     */
+    public void rotate(double rTheta, double changeDuration) {
+        new Thread(() -> {
             while (rotateDuration <= 0.5) {
-                double tempTheta = rTheta *unite* Math.sin(rotateDuration * Math.PI);
+                double tempTheta = rTheta * unite * Math.sin(rotateDuration * Math.PI);
                 rotateDuration += changeDuration;
                 theta = tempTheta + lastTheta;
                 try {
@@ -481,12 +492,18 @@ public class MainPanel extends JPanel implements KeyListener {
                 }
 
             }
-            theta = Math.round(theta/minRotateTheta)*minRotateTheta;
+            theta = Math.round(theta / minRotateTheta) * minRotateTheta;
             lastTheta = theta;
             rotateDuration = 0;
         }).start();
     }
 
+    /**
+     * 小球与药丸碰撞测试
+     * @param ball  小球
+     * @param pill  药丸
+     * @return  返回true为已碰撞，否则为false
+     */
     public boolean pillHitTest(Ball ball, Pill pill) {
         boolean res = false;
         int xDistance = ball.getBallX() - pill.getPillX();
@@ -504,6 +521,11 @@ public class MainPanel extends JPanel implements KeyListener {
         this.setBackground(bg);
     }
 
+    /**
+     * 游戏画面加速
+     * @param timeout   加速时间
+     * @param value 加速值，正数为加速，负数为减速
+     */
     public void accelerateFlushSpeed(int timeout, int value) {
         if (isOnAccelerate) {
             return;
@@ -515,7 +537,7 @@ public class MainPanel extends JPanel implements KeyListener {
             currentFlushSpeed = originalFlushSpeed;
         }
         mContainer.setFlushSpeed(currentFlushSpeed);
-        new Thread(() ->{
+        new Thread(() -> {
             try {
                 Thread.sleep(timeout);
                 mContainer.setFlushSpeed(originalFlushSpeed);
@@ -526,7 +548,12 @@ public class MainPanel extends JPanel implements KeyListener {
         }).start();
     }
 
-
+    /**
+     * 向前移动小球
+     * @param b 小球对象
+     * @param timeout   小球向前移动进行时间
+     * @param ballAheadSpeed    小球移动速度
+     */
     public void ballAhead(Ball b, int timeout, int ballAheadSpeed) {
         if (isBallOnAhead) {
             return;
@@ -550,17 +577,29 @@ public class MainPanel extends JPanel implements KeyListener {
         }).start();
     }
 
+    /**
+     * 设置x,y轴缩放倍数
+     * @param sX
+     * @param sY
+     */
     public void setScale(double sX, double sY) {
-        setScale(sX,sY,0.008);
+        setScale(sX, sY, 0.008);
     }
-    public void setScale(double sX, double sY,double changeDuration) {
+
+    /**
+     * 设置x,y轴缩放倍数
+     * @param sX
+     * @param sY
+     * @param changeDuration 动画速率
+     */
+    public void setScale(double sX, double sY, double changeDuration) {
         if (isOnScale) {
             return;
         }
         isOnScale = true;
         double scaleDurationX = sX - scaleX;
         double scaleDurationY = sY - scaleY;
-        new Thread(()->{
+        new Thread(() -> {
             double duration = 0;
             double tempX = scaleX;
             double tempY = scaleY;
@@ -579,7 +618,7 @@ public class MainPanel extends JPanel implements KeyListener {
     }
 
     public void randomAllColor(int timeout) {
-        new Thread(()->{
+        new Thread(() -> {
             int initTime = 0;
             while (initTime <= timeout) {
                 for (int i = 0; i < lineCounts; i++) {
@@ -643,6 +682,9 @@ public class MainPanel extends JPanel implements KeyListener {
         this.shadowAble = shadowAble;
     }
 
+    /**
+     * 游戏结束
+     */
     public void gameOver() {
         for (int i = 0; i < ballCount; i++) {
             if (!balls[i].isGameOver()) {
@@ -655,11 +697,14 @@ public class MainPanel extends JPanel implements KeyListener {
         }
     }
 
+    /**
+     * 随机产生陷阱
+     */
     public void randomTrap() {
-        int duration = 18/trapNum;
+        int duration = 18 / trapNum;
         trapIndex[0] = 10 + mRandom.nextInt(5);
         for (int i = 1; i < trapNum; i++) {
-            trapIndex[i] = trapIndex[i - 1]+5 + mRandom.nextInt(10
+            trapIndex[i] = trapIndex[i - 1] + 5 + mRandom.nextInt(10
             );
         }
     }

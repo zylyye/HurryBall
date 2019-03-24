@@ -49,6 +49,10 @@ public class Ball {
         jumpRecords = new double[jumpCount];
         jumpH = new int[jumpCount];
     }
+
+    /**
+     * 小球跳跃
+     */
     public void jump() {
         if (jumpAble && totalJumpCount < jumpCount) {
             if (totalJumpCount == 0&&sum(jumpH)>0){
@@ -68,25 +72,28 @@ public class Ball {
 
     private int onJump() {
         int h = 0;
+        // 已跳跃总高度
         h = sumHeight();
+        // 跳跃次数大于0，则正在进行跳跃
         if (totalJumpCount > 0) {
             jumpH[totalJumpCount - 1] = (int) (jumpHeight * Math.sin(jumpRecords[totalJumpCount - 1] * Math.PI));
             jumpRecords[totalJumpCount - 1] += speed;
             if (jumpRecords[totalJumpCount - 1] >= 0.5) {
-
+                // 跳跃结束
                 for (int i = 0; i < jumpCount; i++) {
                     jumpRecords[i] = 0;
                 }
+                // 重置已跳跃次数
                 totalJumpCount = 0;
             }
         } else {
+            // 跳跃次数为0，如果跳跃总高度为0，则小球正在下落
             if (h > 0) {
-//                tempH = (int) (h * Math.sin((tempRecords+0.5) * Math.PI));
                 tempH = (int) (h * Math.sin((tempRecords+0.5) * Math.PI));
                 tempRecords += (speed-0.002);
                 h = tempH;
-
                 if (tempRecords >= 0.5) {
+                    // 小球落地，清零已跳跃高度
                     for (int i = 0; i < jumpCount; i++) {
                         jumpH[i] = 0;
                     }
@@ -100,6 +107,7 @@ public class Ball {
                 }
             }
         }
+        // 返回小球所在的高度
         return getBallY() - h;
     }
 
@@ -120,8 +128,13 @@ public class Ball {
         if (isGameOver) {
             return;
         }
+
+        // 小球跳跃总高度
         int h = sumHeight();
-        if (getBallX() >= currentTrapX-getBallWidth()/2 && getBallX() + getBallWidth()/2 <= currentTrapX + currentTrapWidth&&sumHeight()<=0) {
+        // 判断小球是否处于陷阱上且跳跃高度是否小于等于0
+        if (getBallX() >= currentTrapX-getBallWidth()/2
+                && getBallX() + getBallWidth()/2 <= currentTrapX + currentTrapWidth
+                && sumHeight()<=0) {
             drop(1500,0.007);
         }
     }
@@ -249,6 +262,10 @@ public class Ball {
         }).start();
     }
 
+    /**
+     * 绘制小球
+     * @param g2d
+     */
     public void paint(Graphics2D g2d) {
         onHit();
         ballX += aheadSpeed;
