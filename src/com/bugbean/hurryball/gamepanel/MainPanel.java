@@ -3,7 +3,6 @@ package com.bugbean.hurryball.gamepanel;
 import com.bugbean.hurryball.gameframe.MainFrame;
 import com.bugbean.hurryball.gameframe.SelectFrame;
 import com.bugbean.hurryball.core.*;
-
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.KeyEvent;
@@ -49,7 +48,7 @@ public class MainPanel extends JPanel implements KeyListener {
     private Ball[] balls;
     private int ballCount = 1;
     private Ball ball;
-    //    private int lineCounts = 26;
+//    private int lineCounts = 26;
     private int lineCounts = 56;
 
     private Barrier[] bars;
@@ -281,11 +280,8 @@ public class MainPanel extends JPanel implements KeyListener {
                                 double d = (double) (startX - (getWidth() - 1000)) / ((1000 - 400) * 2);
                                 h = (int) (trapHeight * Math.sin((d + 0.5) * Math.PI));
                             }
-//                        balls[j].setCurrentTrapHeight(h);
-                            if (true) {
                                 balls[j].setCurrentTrapX(startX);
                                 balls[j].setCurrentTrapWidth(lineWidth);
-                            }
                             startY -= h;
                         }
                     }
@@ -310,21 +306,25 @@ public class MainPanel extends JPanel implements KeyListener {
                 }
 
                 //垂直杆状障碍物
-                if (false) {
-                    bars[0].setBarColor(getPointColor(startX, j));
-                    bars[0].setX(startX + 45);
-                    bars[0].setY(startY);
-                    balls[j].setCurrentTrapX(startX + 45);
-                    balls[j].setCurrentTrapHeight(80);
-                    bars[0].paint(g2d);
-                }
-                g2d.setColor(mColors[i % (lineCounts / 2)]);
+//                if(false) {
+//                    bars[0].setBarColor(getPointColor(startX, j));
+//                    bars[0].setX(startX+45);
+//                    bars[0].setY(startY);
+//                    balls[j].setCurrentTrapX(startX+45);
+//                    balls[j].setCurrentTrapHeight(80);
+//                    bars[0].paint(g2d);
+//                }
+
+                // 绘制跳板
+                g2d.setColor(mColors[i % (lineCounts/2)]);
                 g2d.drawLine(startX, startY, endX, startY);
+
             }
             lineStartXs[j] -= speed;
             if (lineStartXs[j] <= -(lineCounts / 2 * (lineWidths[j] + lineDurations[j]))) {
                 lineStartXs[j] = 0;
                 bars[0].setSmallAble(!bars[0].isSmallAble());
+                // 随机重生一个陷阱
                 randomTrap();
             }
 
@@ -417,7 +417,6 @@ public class MainPanel extends JPanel implements KeyListener {
         }
 
     }
-
     @Override
     public void keyReleased(KeyEvent e) {
         if (e.getKeyCode() == KeyEvent.VK_ESCAPE) {
@@ -451,7 +450,7 @@ public class MainPanel extends JPanel implements KeyListener {
      * 小球落地是画面抖动
      */
     public void shakeIt() {
-        new Thread(() -> {
+        ThreadPool.submit(()->{
             while (shakeDuration <= 1) {
                 shakeY = shakeHeight * Math.sin(shakeDuration * Math.PI);
                 shakeDuration += 0.01;
@@ -463,7 +462,7 @@ public class MainPanel extends JPanel implements KeyListener {
             }
             shakeY = 0;
             shakeDuration = 0;
-        }).start();
+        });
     }
 
     /**
@@ -480,7 +479,7 @@ public class MainPanel extends JPanel implements KeyListener {
      * @param changeDuration    旋转动画速率
      */
     public void rotate(double rTheta, double changeDuration) {
-        new Thread(() -> {
+        ThreadPool.submit(()->{
             while (rotateDuration <= 0.5) {
                 double tempTheta = rTheta * unite * Math.sin(rotateDuration * Math.PI);
                 rotateDuration += changeDuration;
@@ -492,10 +491,10 @@ public class MainPanel extends JPanel implements KeyListener {
                 }
 
             }
-            theta = Math.round(theta / minRotateTheta) * minRotateTheta;
+            theta = Math.round(theta/minRotateTheta)*minRotateTheta;
             lastTheta = theta;
             rotateDuration = 0;
-        }).start();
+        });
     }
 
     /**
@@ -537,7 +536,7 @@ public class MainPanel extends JPanel implements KeyListener {
             currentFlushSpeed = originalFlushSpeed;
         }
         mContainer.setFlushSpeed(currentFlushSpeed);
-        new Thread(() -> {
+        ThreadPool.submit(()->{
             try {
                 Thread.sleep(timeout);
                 mContainer.setFlushSpeed(originalFlushSpeed);
@@ -545,7 +544,7 @@ public class MainPanel extends JPanel implements KeyListener {
             } catch (InterruptedException e) {
                 e.printStackTrace();
             }
-        }).start();
+        });
     }
 
     /**
@@ -563,7 +562,7 @@ public class MainPanel extends JPanel implements KeyListener {
         if (b != null) {
             ball.setAheadSpeed(ballAheadSpeed);
         }
-        new Thread(() -> {
+        ThreadPool.submit(()->{
             try {
                 Thread.sleep(timeout);
                 speed = -speed / 2;
@@ -574,7 +573,7 @@ public class MainPanel extends JPanel implements KeyListener {
             } catch (InterruptedException e) {
                 e.printStackTrace();
             }
-        }).start();
+        });
     }
 
     /**
@@ -599,7 +598,7 @@ public class MainPanel extends JPanel implements KeyListener {
         isOnScale = true;
         double scaleDurationX = sX - scaleX;
         double scaleDurationY = sY - scaleY;
-        new Thread(() -> {
+        ThreadPool.submit(()->{
             double duration = 0;
             double tempX = scaleX;
             double tempY = scaleY;
@@ -614,11 +613,15 @@ public class MainPanel extends JPanel implements KeyListener {
                 }
             }
             isOnScale = false;
-        }).start();
+        });
     }
 
+    /**
+     * 随机改变所有跳板颜色
+     * @param timeout 结束时间
+     */
     public void randomAllColor(int timeout) {
-        new Thread(() -> {
+        ThreadPool.submit(()->{
             int initTime = 0;
             while (initTime <= timeout) {
                 for (int i = 0; i < lineCounts; i++) {
@@ -631,7 +634,7 @@ public class MainPanel extends JPanel implements KeyListener {
                     e.printStackTrace();
                 }
             }
-        }).start();
+        });
     }
 
     public boolean isAceleratePillVisible() {

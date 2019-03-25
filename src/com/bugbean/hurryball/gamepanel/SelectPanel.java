@@ -1,6 +1,7 @@
 package com.bugbean.hurryball.gamepanel;
 
 import com.bugbean.hurryball.core.Ball;
+import com.bugbean.hurryball.core.ThreadPool;
 import com.bugbean.utils.ZTools;
 import java.awt.*;
 
@@ -31,7 +32,7 @@ public class SelectPanel extends ImagePanel {
         mBalls[5].setBallY(400,0);
 
         // 小球周期性跳动
-        new Thread(()->{;
+        ThreadPool.submit(()->{
             while (true) {
                 for (int i = 0; i < mBalls.length; i++) {
                     try {
@@ -43,10 +44,8 @@ public class SelectPanel extends ImagePanel {
                     }
                 }
             }
-        }).start();
-
-
-        new Thread(()->{
+        });
+        ThreadPool.submit(()->{
             while(true){
                 try {
                     Thread.sleep(10);
@@ -57,7 +56,7 @@ public class SelectPanel extends ImagePanel {
                     e.printStackTrace();
                 }
             }
-        }).start();
+        });
     }
 
     @Override

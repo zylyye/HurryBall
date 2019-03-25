@@ -23,7 +23,7 @@ public class GameTuneController {
 
 
     public void start() {
-        new Thread(()->{
+        ThreadPool.submit(()->{
 //            mMainPanel.setShadowAble(false);
 //            mMainPanel.setRotateAble(false);
 //            mMainPanel.setAccelerateAble(false);
@@ -72,7 +72,7 @@ public class GameTuneController {
 
 
 
-        }).start();
+        });
     }
 
 

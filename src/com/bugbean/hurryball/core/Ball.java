@@ -3,6 +3,8 @@ package com.bugbean.hurryball.core;
 import com.bugbean.hurryball.gamepanel.MainPanel;
 
 import java.awt.*;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
 
 public class Ball {
     private int index;
@@ -146,7 +148,7 @@ public class Ball {
     public void drop(int dropHeight,double changeDuration) {
         int y = getBallY();
         setGameOver(true);
-        new Thread(()->{
+        ThreadPool.submit(()->{
             double duration = 0;
             while (duration <= 0.5) {
                 int h = (int) (dropHeight * Math.sin((duration+0.5) * Math.PI));
@@ -159,7 +161,7 @@ public class Ball {
                 }
             }
             mMainPanel.gameOver();
-        }).start();
+        });
     }
 
     public int getBallX() {
@@ -245,8 +247,13 @@ public class Ball {
         return ballColor;
     }
 
+    /**
+     * 小球得分
+     * @param value
+     */
     public void addScore(int value) {
-        new Thread(()->{
+        // 想线程池中提交一个任务
+        ThreadPool.submit(()->{
             double tempScore = getScore();
             double duration = 0;
             while (duration <= value) {
@@ -259,7 +266,7 @@ public class Ball {
                 }
             }
             setScore(Math.round((double)getScore()/10)*10);
-        }).start();
+        });
     }
 
     /**
@@ -272,6 +279,4 @@ public class Ball {
         g2d.setColor(ballColor);
         g2d.fillOval(ballX,onJump(),ballWidth,ballHeight);
     }
-
-
 }

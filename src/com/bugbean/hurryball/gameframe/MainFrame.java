@@ -1,6 +1,7 @@
 package com.bugbean.hurryball.gameframe;
 
 import com.bugbean.hurryball.core.Manifest;
+import com.bugbean.hurryball.core.ThreadPool;
 import com.bugbean.hurryball.gamepanel.MainPanel;
 import com.bugbean.hurryball.core.GameTuneController;
 import com.bugbean.utils.ZTools;
@@ -24,7 +25,7 @@ public class MainFrame extends BaseFrame {
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         mMainPanel = new MainPanel(this,playerNum);
         add(mMainPanel);
-        new Thread(()->{
+        ThreadPool.submit(()->{
             while(true) {
                 while (!mMainPanel.isPaused()) {
                     mMainPanel.repaint();
@@ -42,7 +43,7 @@ public class MainFrame extends BaseFrame {
                     e.printStackTrace();
                 }
             }
-        }).start();
+        });
         Color bg = new Color(255, 255, 255, 200);
         mMainPanel.setBackground(bg);
         addKeyListener(mMainPanel);
