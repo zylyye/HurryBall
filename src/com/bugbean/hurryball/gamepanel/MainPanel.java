@@ -1,8 +1,9 @@
 package com.bugbean.hurryball.gamepanel;
 
+import com.bugbean.hurryball.core.*;
 import com.bugbean.hurryball.gameframe.MainFrame;
 import com.bugbean.hurryball.gameframe.SelectFrame;
-import com.bugbean.hurryball.core.*;
+
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.KeyEvent;
@@ -14,14 +15,13 @@ import java.awt.image.BufferedImage;
 import java.util.Random;
 
 public class MainPanel extends JPanel implements KeyListener {
+    private static BufferedImage bgImage;
     /**
      * 刷新间隔偏移量
      */
     private long flushOffset = 0;
-
     private MainFrame mContainer;
     private Random mRandom = new Random();
-    private static BufferedImage bgImage;
     private MusicManager mMusicManager;
 
     private int initX = 0;
@@ -48,7 +48,7 @@ public class MainPanel extends JPanel implements KeyListener {
     private Ball[] balls;
     private int ballCount = 1;
     private Ball ball;
-//    private int lineCounts = 26;
+    //    private int lineCounts = 26;
     private int lineCounts = 56;
 
     private Barrier[] bars;
@@ -280,8 +280,8 @@ public class MainPanel extends JPanel implements KeyListener {
                                 double d = (double) (startX - (getWidth() - 1000)) / ((1000 - 400) * 2);
                                 h = (int) (trapHeight * Math.sin((d + 0.5) * Math.PI));
                             }
-                                balls[j].setCurrentTrapX(startX);
-                                balls[j].setCurrentTrapWidth(lineWidth);
+                            balls[j].setCurrentTrapX(startX);
+                            balls[j].setCurrentTrapWidth(lineWidth);
                             startY -= h;
                         }
                     }
@@ -316,7 +316,7 @@ public class MainPanel extends JPanel implements KeyListener {
 //                }
 
                 // 绘制跳板
-                g2d.setColor(mColors[i % (lineCounts/2)]);
+                g2d.setColor(mColors[i % (lineCounts / 2)]);
                 g2d.drawLine(startX, startY, endX, startY);
 
             }
@@ -417,6 +417,7 @@ public class MainPanel extends JPanel implements KeyListener {
         }
 
     }
+
     @Override
     public void keyReleased(KeyEvent e) {
         if (e.getKeyCode() == KeyEvent.VK_ESCAPE) {
@@ -450,7 +451,7 @@ public class MainPanel extends JPanel implements KeyListener {
      * 小球落地是画面抖动
      */
     public void shakeIt() {
-        ThreadPool.submit(()->{
+        ThreadPool.submit(() -> {
             while (shakeDuration <= 1) {
                 shakeY = shakeHeight * Math.sin(shakeDuration * Math.PI);
                 shakeDuration += 0.01;
@@ -467,6 +468,7 @@ public class MainPanel extends JPanel implements KeyListener {
 
     /**
      * 游戏画面旋转，默认旋转速率0.01
+     *
      * @param rTheta 旋转角度
      */
     public void rotate(double rTheta) {
@@ -475,11 +477,12 @@ public class MainPanel extends JPanel implements KeyListener {
 
     /**
      * 游戏画面旋转
-     * @param rTheta    旋转角度，单位度
-     * @param changeDuration    旋转动画速率
+     *
+     * @param rTheta         旋转角度，单位度
+     * @param changeDuration 旋转动画速率
      */
     public void rotate(double rTheta, double changeDuration) {
-        ThreadPool.submit(()->{
+        ThreadPool.submit(() -> {
             while (rotateDuration <= 0.5) {
                 double tempTheta = rTheta * unite * Math.sin(rotateDuration * Math.PI);
                 rotateDuration += changeDuration;
@@ -491,7 +494,7 @@ public class MainPanel extends JPanel implements KeyListener {
                 }
 
             }
-            theta = Math.round(theta/minRotateTheta)*minRotateTheta;
+            theta = Math.round(theta / minRotateTheta) * minRotateTheta;
             lastTheta = theta;
             rotateDuration = 0;
         });
@@ -499,11 +502,12 @@ public class MainPanel extends JPanel implements KeyListener {
 
     /**
      * 小球与药丸碰撞测试
-     * @param ball  小球
-     * @param pill  药丸
-     * @return  返回true为已碰撞，否则为false
+     *
+     * @param ball 小球
+     * @param pill 药丸
+     * @return 返回true为已碰撞，否则为false
      */
-    public boolean pillHitTest(Ball ball, Pill pill) {
+    private boolean pillHitTest(Ball ball, Pill pill) {
         boolean res = false;
         int xDistance = ball.getBallX() - pill.getPillX();
         int yDistance = ball.getBallY() - ball.sumHeight() - pill.getMovedHeight();
@@ -522,8 +526,9 @@ public class MainPanel extends JPanel implements KeyListener {
 
     /**
      * 游戏画面加速
-     * @param timeout   加速时间
-     * @param value 加速值，正数为加速，负数为减速
+     *
+     * @param timeout 加速时间
+     * @param value   加速值，正数为加速，负数为减速
      */
     public void accelerateFlushSpeed(int timeout, int value) {
         if (isOnAccelerate) {
@@ -536,7 +541,7 @@ public class MainPanel extends JPanel implements KeyListener {
             currentFlushSpeed = originalFlushSpeed;
         }
         mContainer.setFlushSpeed(currentFlushSpeed);
-        ThreadPool.submit(()->{
+        ThreadPool.submit(() -> {
             try {
                 Thread.sleep(timeout);
                 mContainer.setFlushSpeed(originalFlushSpeed);
@@ -549,9 +554,10 @@ public class MainPanel extends JPanel implements KeyListener {
 
     /**
      * 向前移动小球
-     * @param b 小球对象
-     * @param timeout   小球向前移动进行时间
-     * @param ballAheadSpeed    小球移动速度
+     *
+     * @param b              小球对象
+     * @param timeout        小球向前移动进行时间
+     * @param ballAheadSpeed 小球移动速度
      */
     public void ballAhead(Ball b, int timeout, int ballAheadSpeed) {
         if (isBallOnAhead) {
@@ -562,7 +568,7 @@ public class MainPanel extends JPanel implements KeyListener {
         if (b != null) {
             ball.setAheadSpeed(ballAheadSpeed);
         }
-        ThreadPool.submit(()->{
+        ThreadPool.submit(() -> {
             try {
                 Thread.sleep(timeout);
                 speed = -speed / 2;
@@ -578,6 +584,7 @@ public class MainPanel extends JPanel implements KeyListener {
 
     /**
      * 设置x,y轴缩放倍数
+     *
      * @param sX
      * @param sY
      */
@@ -587,6 +594,7 @@ public class MainPanel extends JPanel implements KeyListener {
 
     /**
      * 设置x,y轴缩放倍数
+     *
      * @param sX
      * @param sY
      * @param changeDuration 动画速率
@@ -598,7 +606,7 @@ public class MainPanel extends JPanel implements KeyListener {
         isOnScale = true;
         double scaleDurationX = sX - scaleX;
         double scaleDurationY = sY - scaleY;
-        ThreadPool.submit(()->{
+        ThreadPool.submit(() -> {
             double duration = 0;
             double tempX = scaleX;
             double tempY = scaleY;
@@ -618,10 +626,11 @@ public class MainPanel extends JPanel implements KeyListener {
 
     /**
      * 随机改变所有跳板颜色
+     *
      * @param timeout 结束时间
      */
     public void randomAllColor(int timeout) {
-        ThreadPool.submit(()->{
+        ThreadPool.submit(() -> {
             int initTime = 0;
             while (initTime <= timeout) {
                 for (int i = 0; i < lineCounts; i++) {

@@ -14,7 +14,7 @@ public class Pill {
     private int height = 30;
     private Color pillColor;
 
-    private static BufferedImage pillImage;
+//    private static BufferedImage pillImage;
     protected Random mRandom = new Random();
 
     protected int movedHeight;
@@ -25,7 +25,7 @@ public class Pill {
 
     public Pill() {
         pillColor = randomColor();
-        pillImage = Manifest.getImage("images/cool_pill.png");
+//        pillImage = Manifest.getImage("images/cool_pill.png");
         randomX();
     }
 

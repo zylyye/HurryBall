@@ -2,19 +2,20 @@ package com.bugbean.hurryball.core;
 
 import java.applet.Applet;
 import java.applet.AudioClip;
-import java.io.File;
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * 音乐管理器类
  */
 public class MusicManager {
 
-    public static MusicManager sMusicManager;
+    private static MusicManager sMusicManager;
 
     /**
      * 存储音乐资源的数组
      */
-    private AudioClip[] auus;
+    private List<AudioClip> auus;
 
     /**
      * 存储音乐列表的数组
@@ -23,10 +24,9 @@ public class MusicManager {
             "stereo_madness.wav"
     };
 
-    private int size;
 
     private MusicManager() {
-        auus = new AudioClip[musicList.length];
+        auus = new ArrayList<>(3);
         for (int i = 0; i < musicList.length; i++) {
             add("sounds/" + musicList[i]);
         }
@@ -43,21 +43,20 @@ public class MusicManager {
      * 播放指定音乐
      */
     public void play(int index) {
-        auus[index].play();
+        auus.get(index).play();
     }
 
     /**
      * 停止指定音乐
      */
     public void stop(int index) {
-        auus[index].stop();
+        auus.get(index).stop();
     }
 
     /**
-     * 向数组中添加音乐
+     * 向添加音乐
      */
     public void add(String musicPath) {
-        File file = new File(musicPath);
-        auus[size++] = Applet.newAudioClip(Manifest.getResourceURL(musicPath));
+        auus.add(Applet.newAudioClip(Manifest.getResourceURL(musicPath)));
     }
 }
